@@ -1,4 +1,5 @@
-using E_mob_shoppy.Data;
+
+using E_mob_shoppy.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_mob_shoppy

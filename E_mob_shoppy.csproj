@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\E_mob_shoppy.DataAccess\E_mob_shoppy.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
