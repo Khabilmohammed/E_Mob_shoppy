@@ -1,5 +1,6 @@
 ﻿
 using E_mob_shoppy.DataAccess.Data;
+using E_mob_shoppy.DataAccess.Repository.IRepository;
 using E_mob_shoppy.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,14 +9,14 @@ namespace E_mob_shoppy.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        private readonly ICategoryRepository _categoryRepo;
+        public CategoryController(ICategoryRepository db)
         {
-            _db = db;
+            _categoryRepo = db;
         }
         public IActionResult Index()
         {
-            var objCtegory = _db.Categories.ToList();
+            var objCtegory = _categoryRepo.GetAll().ToList();
             return View(objCtegory);
         }
 
@@ -32,8 +33,8 @@ namespace E_mob_shoppy.Controllers
                 ModelState.AddModelError("DisplayOrder", "Display Order and Name should be different");
             }
             if (ModelState.IsValid) {
-                _db.Categories.Add(obj);
-                _db.SaveChanges();
+                _categoryRepo.Add(obj);
+                _categoryRepo.Save();
                 TempData["success"] = "The data is Created";
                 return RedirectToAction("Index", "Category");
             }
@@ -47,7 +48,7 @@ namespace E_mob_shoppy.Controllers
             {
                 return NotFound();
             }
-            Category? categoryfromdb = _db.Categories.FirstOrDefault(u=>u.Category_Id==id);
+            Category? categoryfromdb = _categoryRepo.Get(u=>u.Category_Id==id);
             if (categoryfromdb == null)
             {
 
@@ -68,8 +69,8 @@ namespace E_mob_shoppy.Controllers
             }
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
+                _categoryRepo.Upadte(obj);
+                _categoryRepo.Save();
                 TempData["success"] = "The data is upadated";
                 return RedirectToAction("Index", "Category");
             }
@@ -82,7 +83,7 @@ namespace E_mob_shoppy.Controllers
             {
                 return NotFound();
             }
-            Category? categoryfromdb = _db.Categories.FirstOrDefault(u => u.Category_Id == id);
+            Category? categoryfromdb = _categoryRepo.Get(u => u.Category_Id == id);
             if (categoryfromdb == null)
             {
 
@@ -97,13 +98,13 @@ namespace E_mob_shoppy.Controllers
             {
                 return NotFound();
             }
-            Category? category = _db.Categories.FirstOrDefault(c=>c.Category_Id==id);
+            Category? category = _categoryRepo.Get(u => u.Category_Id == id);
             if(category == null)
             {
                 return NotFound();
             }
-            _db.Categories.Remove(category);
-            _db.SaveChanges();
+            _categoryRepo.Remove(category);
+            _categoryRepo.Save();
             TempData["success"] = "The data is Removed";
             return RedirectToAction("Index", "Category");
         }

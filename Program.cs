@@ -1,5 +1,7 @@
 
 using E_mob_shoppy.DataAccess.Data;
+using E_mob_shoppy.DataAccess.Repository;
+using E_mob_shoppy.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_mob_shoppy
@@ -14,6 +16,8 @@ namespace E_mob_shoppy
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 
             var app = builder.Build();
 
