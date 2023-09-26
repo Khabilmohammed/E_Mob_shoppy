@@ -1,0 +1,67 @@
+﻿@model Product
+
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2 "> Delete Product </h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+
+        <form method="post" class="row">
+            <input asp-for="ProductId" hidden />
+            <div class=" p-3 mt-2">
+                <div asp-validation-summary="All"></div>
+                <div class="form-floating py-2 col-12">
+                    <input asp-for="ProductName" disable" type="text" class="form-control border-0 shadow" />
+                    <label asp-for="ProductName" class="ms-2"></label>
+                    
+                </div>
+                <div class="form-floating py-2 col-12">
+
+                    <input asp-for="ProductDescription" disable type="text" class="form-control border-0 shadow" />
+                    <label asp-for="ProductDescription" class="ms-2"></label>
+                   
+                </div>
+                <div class="form-floating py-2 col-12">
+
+                    <input asp-for="Price" type="text" disable class="form-control border-0 shadow" />
+                    <label asp-for="Price" class="ms-2"></label>
+                   
+                </div>
+                <div class="form-floating py-2 col-12">
+
+                    <input asp-for="Listprice50" disable type="text" class="form-control border-0 shadow" />
+                    <label asp-for="Listprice50" class="ms-2"></label>
+                    <span asp-validation-for="Listprice50" class="text-primary"></span>
+                </div>
+                <div class="form-floating py-2 col-12">
+
+                    <input asp-for="Listprice100" disable type="text" class="form-control border-0 shadow" />
+                    <label asp-for="Listprice100" class="ms-2"></label>
+                    
+                </div>
+
+                <div class="form-floating py-2 col-12">
+
+                    <input asp-for="ProductQuantity" disable type="text" class="form-control border-0 shadow" />
+                    <label asp-for="ProductQuantity" class="ms-2"></label>
+                    
+                </div>
+                <button type="submit" class="btn btn-primary mt-3" style="width:150px">Delete</button>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-secondary border mt-3" style="width:150px">Back to list</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
