@@ -2,7 +2,10 @@
 using E_mob_shoppy.DataAccess.Repository;
 using E_mob_shoppy.DataAccess.Repository.IRepository;
 using E_mob_shoppy.Models;
+using E_mob_shoppy.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 
 namespace E_mob_shoppy.Areas.Admin.Controllers
 {
@@ -19,7 +22,8 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
 
         public IActionResult index()
         {
-            var objproduct=_unitOfWork.Product.GetAll().ToList();
+            List<Product> objproduct=_unitOfWork.Product.GetAll().ToList();
+           
             return View(objproduct);
         }
 
@@ -57,20 +61,42 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            return View();
+
+            ProductVM productVM = new()
+            {
+                CategoryList = _unitOfWork.Category
+               .GetAll().Select(u => new SelectListItem
+               {
+                   Text = u.Name,
+                   Value = u.Category_Id.ToString()
+               }),
+                Product = new Product()
+            };
+            return View(productVM);
         }
         [HttpPost]
-        public IActionResult Create(Product obj)
+        public IActionResult Create(ProductVM productVM)
         {
             
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Add(obj);
+                _unitOfWork.Product.Add(productVM.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "The Data is Created";
                 return RedirectToAction("Index", "Product");
             }
-            return View();
+            else
+            {
+
+                productVM.CategoryList = _unitOfWork.Category
+          .GetAll().Select(u => new SelectListItem
+          {
+              Text = u.Name,
+              Value = u.Category_Id.ToString()
+          });
+                return View(productVM);
+            }
+           
 
         }
 
