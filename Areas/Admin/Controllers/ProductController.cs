@@ -14,10 +14,12 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
     {
 
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork,IWebHostEnvironment webHostEnvironment)
         {
-            _unitOfWork = unitOfWork;   
-        }
+            _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
+        }   
 
 
         public IActionResult index()
@@ -27,39 +29,8 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
             return View(objproduct);
         }
 
-        public IActionResult Edit(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            Product? productfromdb = _unitOfWork.Product.Get(u => u.ProductId == id);
-            if (productfromdb == null)
-            {
 
-                return NotFound();
-            }
-            return View(productfromdb);
-        }
-
-
-        [HttpPost]
-        public IActionResult Edit(Product obj)
-        {
-            
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Upadte(obj);
-                _unitOfWork.Save();
-                TempData["success"] = "The data is upadated";
-                return RedirectToAction("Index", "Product");
-            }
-            return View();
-
-        }
-
-
-        public IActionResult Create()
+        public IActionResult Upsert(int? id)
         {
 
             ProductVM productVM = new()
@@ -72,14 +43,38 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
                }),
                 Product = new Product()
             };
-            return View(productVM);
+
+            if(id == null || id == 0)
+            {
+                return View(productVM);
+            }
+            else
+            {
+                productVM.Product=_unitOfWork.Product.Get(u=>u.ProductId == id);
+                return View(productVM);
+            }
+           
         }
         [HttpPost]
-        public IActionResult Create(ProductVM productVM)
+        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
         {
             
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string fileName=Guid.NewGuid().ToString()+Path.GetExtension(file.FileName);
+                    string productPath=Path.Combine(wwwRootPath, @"Images\Product");
+
+                    using (var filestream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(filestream);
+                    }
+
+                    productVM.Product.ImageUrl = @"\Images\Product"+fileName;
+                   
+                }
                 _unitOfWork.Product.Add(productVM.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "The Data is Created";
@@ -96,8 +91,6 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
           });
                 return View(productVM);
             }
-           
-
         }
 
 

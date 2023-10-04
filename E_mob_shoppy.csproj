@@ -20,4 +20,8 @@
     <ProjectReference Include="..\E_mob_shoppy.DataAccess\E_mob_shoppy.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\Product\" />
+  </ItemGroup>
+
 </Project>
