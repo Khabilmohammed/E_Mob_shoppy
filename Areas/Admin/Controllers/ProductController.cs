@@ -24,7 +24,7 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
 
         public IActionResult index()
         {
-            List<Product> objproduct=_unitOfWork.Product.GetAll().ToList();
+            List<Product> objproduct=_unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
            
             return View(objproduct);
         }
@@ -64,18 +64,39 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
                 if (file != null)
                 {
-                    string fileName=Guid.NewGuid().ToString()+Path.GetExtension(file.FileName);
-                    string productPath=Path.Combine(wwwRootPath, @"Images\Product");
+                    string fileName=Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string productPath= Path.Combine(wwwRootPath, @"Images\Product");
+                    if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
+                    {
+                        //delete the old image
+                        var OldImagePath=
+                            Path.Combine(wwwRootPath,productVM.Product.ImageUrl.TrimStart('\\'));
+
+                        if(System.IO.File.Exists(OldImagePath))
+                        {
+                            System.IO.File.Delete(OldImagePath);
+                        }
+                    }
+
 
                     using (var filestream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
                     {
                         file.CopyTo(filestream);
                     }
 
-                    productVM.Product.ImageUrl = @"\Images\Product"+fileName;
+                    productVM.Product.ImageUrl = @"\Images\Product\" + fileName;
                    
                 }
-                _unitOfWork.Product.Add(productVM.Product);
+
+                if (productVM.Product.ProductId == 0)
+                {
+                    _unitOfWork.Product.Add(productVM.Product);
+                }
+                else
+                {
+                    _unitOfWork.Product.Upadte(productVM.Product);
+                }
+               
                 _unitOfWork.Save();
                 TempData["success"] = "The Data is Created";
                 return RedirectToAction("Index", "Product");
@@ -126,5 +147,15 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
             TempData["success"] = "The data is Removed";
             return RedirectToAction("Index", "Product");
         }
+
+
+        #region API CALLS
+        public IActionResult GetAll()
+        {
+            List<Product> objproductList = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+            return Json(new { data = objproductList });
+        }
+
+        #endregion
     }
 }
