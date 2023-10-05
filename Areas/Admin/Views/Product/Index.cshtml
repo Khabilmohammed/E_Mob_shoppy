@@ -19,7 +19,7 @@
                 </div>
         </div>
 
-        <table class="table table-bordered table-striped pt-2">
+        <table id="tblData" class="table table-bordered table-striped pt-2" style="width:100%">
             <thead class="thead-dark">
                 <tr>
                     <th>
@@ -40,35 +40,17 @@
                     <th>
                         Category
                     </th>
+                    <th>
+                        Manupulate
+                    </th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach (var obj in Model)
-                {
-                    <tr>
-                        <td>@obj.ProductId</td>
-                        <td>@obj.ProductName</td>
-                        <td>@obj.ProductDescription</td>
-                        <td>@obj.Price</td>
-                        <td>@obj.ProductQuantity</td>
-                        <td>@obj.Category.Name</td>
-                        <td>
-                            <div class="w-75 btn-group" role="group">
-                                <a class="btn btn-primary mx-2" asp-action="Upsert" asp-route-id="@obj.ProductId" asp-controller="Product">
-                                    <i class="bi bi-pencil-square"></i> Edit
-                                </a>
-                                <a class="btn btn-danger mx-2" asp-action="Delete" asp-route-id="@obj.ProductId" asp-controller="Product">
-                                    <i class="bi bi-x-octagon"></i> Deletee
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                }
-
-            </tbody>
+            
         </table>
     </div>
 </div>
 
-
+@section Scripts{
+    <script src="~/js/product.js"></script>
+}
 
