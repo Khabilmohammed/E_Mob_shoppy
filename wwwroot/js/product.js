@@ -1,6 +1,5 @@
 ﻿
 var datatable;
-
 $(document).ready(function () {
     loadDataTable();
 });
@@ -44,7 +43,7 @@ function Delete(url) {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url:url,
+                url: url,
                 type: 'DELETE',
                 success: function (data) {
                     datatable.ajax.reload();
