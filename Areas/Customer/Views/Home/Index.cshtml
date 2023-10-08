@@ -1,37 +1,27 @@
 ﻿@model IEnumerable<Product>
 
 <section class="content-main">
-    <div class="row pb-3">
-        @foreach (var product in Model)
-        {
-            <div class="col-lg-2 col-sm-6">
-                <div class="row p-2">
-                    <div class="col-12 p-1">
-                        <div class="card border-0 p-3 shadow border-top border-5 rounded">
-                            <img src="@product.ImageUrl" class="card-img-top rounded">
-                            <div class="card-body pb-0">
-                                <div class="pl-1">
-                                    <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">@product.ProductName</p>
-                                    <p class="card-title text-warning text-center">@product.Price</p>
-                                </div>
-                                <div class="pl-1">
-                                    <p class=" text-dark opacity-75 text-center mb-0">List Price: <span class="text-decoration-line-through">@product.Price.ToString("c")</span></p>
-                                </div>
-                                <div class="pl-1">
-                                    <p class=" text-dark opacity-75 text-center">as low as: <span> @product.Listprice100.ToString("c")</span></p>
-                                </div>
-                            </div>
-                            <div>
-                                <a class="btn btn-primary bg-gradient border-0  form-control">
-                                    Details
-                                </a>
-                            </div>
+    <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">  
+            @foreach (var product in Model)
+            {
+            <div class="col">
+                <div class="card-body">
+                    <div class="card card-product-grid">
+                        <a href="#" class="img-wrap"> <img src="@product.ImageUrl" alt="Product"> </a>
+                        <div class="info-wrap">
+                            <a href="#" class="title text-truncate">@product.ProductName</a>
+                            <div class="price mb-2">@product.Price</div> <!-- price.// -->
+                            <div class="price mb-2">List Price: <span class="text-decoration-line-through">@product.Price.ToString("c")</span></div>
+
+                            <div class="price mb-2">as low as: <span> @product.Listprice100.ToString("c")</span></div> <!-- price.// -->
+                            <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="btn btn-sm font-sm btn-primary  rounded form-control">
+                                <i class="material-icons md-delete_forever"></i> Details
+                            </a>
                         </div>
-                    </div>
+                    </div> 
                 </div>
             </div>
         }
-
     </div>
 
-</section>
+</section> 

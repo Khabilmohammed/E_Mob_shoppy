@@ -1,0 +1,45 @@
+﻿@model Product
+
+
+<section class="content-main">
+    <h1>Product Details</h1>
+    <form method="post">
+        <section style="background-color: #eee;">
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6 col-xl-4">
+                        <div class="card text-black">
+                           
+                            <img src="@Model.ImageUrl"
+                                 class="card-img-top" alt="Apple Computer" />
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <h5 class="card-title">@Model.ProductName</h5>
+                                    <p class="text-muted mb-4">@Model.Category.Name</p>
+                                </div>
+                                <div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>List price</span><span>@Model.Price</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span> Main Price</span><span class="text-decoration-line-through">@Model.Price.ToString("c")</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span> As Low as Possible</span><span> @Model.Listprice100.ToString("c")</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between total font-weight-bold mt-4">
+                                    <span>Total</span><span>$7,197.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </form>
+
+
+
+</section>
