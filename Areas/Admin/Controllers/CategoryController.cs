@@ -2,12 +2,15 @@
 using E_mob_shoppy.DataAccess.Data;
 using E_mob_shoppy.DataAccess.Repository.IRepository;
 using E_mob_shoppy.Models;
+using E_mob_shoppy.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace E_mob_shoppy.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles =SD.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _UnitOfWork;

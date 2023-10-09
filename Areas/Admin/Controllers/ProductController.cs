@@ -3,6 +3,8 @@ using E_mob_shoppy.DataAccess.Repository;
 using E_mob_shoppy.DataAccess.Repository.IRepository;
 using E_mob_shoppy.Models;
 using E_mob_shoppy.Models.ViewModel;
+using E_mob_shoppy.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using System.Collections.Generic;
 namespace E_mob_shoppy.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController:Controller
     {
 
