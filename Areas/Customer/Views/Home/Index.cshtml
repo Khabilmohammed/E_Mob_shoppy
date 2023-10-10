@@ -1,62 +1,61 @@
 ﻿@model IEnumerable<Product>
 
-<section class="content-main">
-    <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">  
-            @foreach (var product in Model)
-            {
-            <div class="col">
-                <div class="card-body">
-                    <div class="card card-product-grid">
-                        <a href="#" class="img-wrap"> <img src="@product.ImageUrl" alt="Product"> </a>
-                        <div class="info-wrap">
-                            <a href="#" class="title text-truncate">@product.ProductName</a>
-                            <div class="price mb-2">@product.Price</div> <!-- price.// -->
-                            <div class="price mb-2">List Price: <span class="text-decoration-line-through">@product.Price.ToString("c")</span></div>
 
-                            <div class="price mb-2">as low as: <span> @product.Listprice100.ToString("c")</span></div> <!-- price.// -->
-                            <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="btn btn-sm font-sm btn-primary  rounded form-control">
-                                <i class="material-icons md-delete_forever"></i> Details
-                            </a>
-                        </div>
-                    </div> 
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Products grid</h2>
+            <p>List Of items</p>
+        </div>
+        <div>
+            <a href="#" class="btn btn-light rounded font-md">Export</a>
+            <a href="#" class="btn btn-light rounded  font-md">Import</a>
+            <a href="#" class="btn btn-primary btn-sm rounded">Create new</a>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <div class="row gx-3">
+                <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="text" placeholder="Search..." class="form-control">
+                </div>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>All category</option>
+                        <option>Electronics</option>
+                        <option>Clothings</option>
+                        <option>Something else</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-6 col-md-3">
+                    <select class="form-select">
+                        <option>Latest added</option>
+                        <option>Cheap first</option>
+                        <option>Most viewed</option>
+                    </select>
                 </div>
             </div>
+        </header> 
+        <div class="card-body">
+            <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">
+
+            @foreach (var product in Model)
+            {
+                    <div class="col">
+                        <div class="card card-product-grid">
+                            <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ImageUrl" width="300" height="200" alt="Product"> </a>
+                            <div class="info-wrap">
+                                <a  class="title text-truncate">@product.ProductName</a>
+                                <div class="price mb-2">@product.Listprice50.ToString("c")</div> <!-- price.// -->
+                                <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="btn btn-sm font-sm rounded btn-brand">
+                                    <i class="material-icons md-edit"></i> Detail
+                                </a>
+                               
+                            </div>
+                        </div> <!-- card-product  end// -->
+                    </div> <!-- col.// -->                 
         }
     </div>
 
 </section> 
-
-
-<div class="container">
-    <div class="row">
-
-        <div class="col-md-4" style="padding:15px;">
-            <div style="display:inline-block; border:solid 1px #808080; padding:15px">
-                <div>
-                    <img class="img-fluid" alt="eCommerce Product List" src="" />
-                    <br />
-                    <h2 class="float-xs-right">$285.00</h2>
-                    <h2><a></a></h2>
-                    <br />
-                    <p class="text-justify">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                </div>
-                <br />
-                <div class="ratings text-xs-center">
-                    <p>
-                        <div id="rating1"></div>
-                        (10 reviews)
-                    </p>
-                </div>
-                <br />
-                <div class="btn-ground text-xs-center" style="padding-bottom: 30px">
-                    <button type="button" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> Add</button>
-                  
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
 

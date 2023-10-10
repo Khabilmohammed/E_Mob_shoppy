@@ -31,6 +31,8 @@ namespace E_mob_shoppy.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public string Username { get; set; }
 
+        
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -58,10 +60,12 @@ namespace E_mob_shoppy.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
         }
 
         private async Task LoadAsync(IdentityUser user)
         {
+           
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
