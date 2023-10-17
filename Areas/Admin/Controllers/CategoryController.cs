@@ -75,7 +75,7 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
             {
                 _UnitOfWork.Category.Upadte(obj);
                 _UnitOfWork.Save();
-                TempData["success"] = "The data is upadated";
+                TempData["success"] = "The data is updated";
                 return RedirectToAction("Index", "Category");
             }
             return View();

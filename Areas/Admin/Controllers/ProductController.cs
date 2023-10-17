@@ -27,9 +27,9 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
 
         public IActionResult index()
         {
-            List<Product> objproduct=_unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
+            List<Product> productlist=_unitOfWork.Product.GetAll(includeProperties:"Category").ToList();
            
-            return View(objproduct);
+            return View(productlist);
         }
 
 
