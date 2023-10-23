@@ -42,13 +42,15 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
+                 @if (User.IsInRole(SD.Role_Admin))
+                    {
                 <li class="menu-item ">
-                    <a class="menu-link" asp-area="Customer" asp-controller="Home" asp-action="Privacy">
+                    <a class="menu-link" asp-area="Admin" asp-controller="Order" asp-action="Index">
                         <i class="icon material-icons md-home"></i>
-                        <span class="text">Privacy</span>
+                        <span class="text">Manage Order</span>
                     </a>
                 </li>
-
+                }
                
                
                     @if (User.IsInRole(SD.Role_Admin))
