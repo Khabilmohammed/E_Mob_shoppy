@@ -1,7 +1,10 @@
 ﻿using E_mob_shoppy.DataAccess.Repository.IRepository;
 using E_mob_shoppy.Models;
+using E_mob_shoppy.Models.ViewModel;
+using E_mob_shoppy.Utility;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace E_mob_shoppy.Areas.Admin.Controllers
 {
@@ -19,14 +22,49 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
 			return View();
 		}
 
+        public IActionResult Detail(int orderId)
+        { 
+            OrderVM orderVm = new()
+            {
+                orderHeader = _unitOfWork.OrderHeader.Get(u => u.OrderHeaderId == orderId, includeProperties: "ApplicationUser"),
+                orderDetail= _unitOfWork.OrderDetail.GetAll(u=>u.OrderHeaderId == orderId,includeProperties:"Product")
+            };
 
-		#region API CALLS 
-		[HttpGet]
-		public IActionResult GetAll()
+            return View(orderVm);   
+        }
+
+
+        #region API CALLS 
+        [HttpGet] 
+		public IActionResult GetAll(string status)
 		{
-			List<OrderHeader> objOrderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList();
-			return Json(new { data = objOrderHeaders });
-		}
+			IEnumerable<OrderHeader> objOrderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser").ToList();
+			
+
+            switch (status)
+            {
+                case "pending":
+                    objOrderHeaders = objOrderHeaders.Where(u => u.PaymentStatus == SD.PaymentStatusDelayed);
+                    break;
+                case "inprocess":
+                    objOrderHeaders = objOrderHeaders.Where(u => u.OrderStatus == SD.StatusInProcess);
+                    break;
+                case "completed":
+                    objOrderHeaders = objOrderHeaders.Where(u => u.OrderStatus == SD.StatusShipped);
+                    break;
+                case "approved":
+                    objOrderHeaders = objOrderHeaders.Where(u => u.OrderStatus == SD.StatusApproved);
+                    break;
+                default: break;
+
+            }
+
+
+
+
+            return Json(new {data=objOrderHeaders});
+
+        }
 
 		
 
