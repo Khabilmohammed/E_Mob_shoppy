@@ -36,6 +36,14 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
                 ModelState.AddModelError("Name", "Display Order and Name should be different");
                 ModelState.AddModelError("DisplayOrder", "Display Order and Name should be different");
             }
+
+            var objCtegory = _UnitOfWork.Category.GetAll().ToList();
+            var existingCategoryNames = _UnitOfWork.Category.GetAll().Select(c => c.Name).ToList();
+            if(existingCategoryNames.Contains(obj.Name))
+            {
+                ModelState.AddModelError("Name", "Al Ready Exits");
+            }
+
             if (ModelState.IsValid) {
                 _UnitOfWork.Category.Add(obj);
                 _UnitOfWork.Save();

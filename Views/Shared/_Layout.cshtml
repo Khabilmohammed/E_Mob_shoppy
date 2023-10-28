@@ -42,8 +42,8 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                 @if (User.IsInRole(SD.Role_Admin))
-                    {
+                 @if (User.IsInRole(SD.Role_Admin)||User.IsInRole(SD.Role_Customer))
+                    {   
                 <li class="menu-item ">
                     <a class="menu-link" asp-area="Admin" asp-controller="Order" asp-action="Index">
                         <i class="icon material-icons md-home"></i>

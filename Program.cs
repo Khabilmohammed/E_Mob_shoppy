@@ -18,13 +18,14 @@ namespace E_mob_shoppy
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
-
+            
             builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             builder.Services.ConfigureApplicationCookie(option =>
@@ -34,7 +35,11 @@ namespace E_mob_shoppy
                 option.AccessDeniedPath = "/Identity/Account/AccessDenied";
             });
 
-
+            builder.Services.AddAuthentication().AddGoogle(option =>
+            {
+                option.ClientId = "454370760301-hupnkkjm6vb4k2s6nqjrp5sjj3kt5f7v.apps.googleusercontent.com";
+                option.ClientSecret = "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";
+            });
             builder.Services.AddRazorPages();
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();

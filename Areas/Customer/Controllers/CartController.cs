@@ -13,7 +13,6 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 {
     [Area("Customer")]
     [Authorize]
-
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +25,6 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
         }
         public IActionResult Index()
         {
-
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -42,9 +40,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
                 cart.Price = GetPriceBasedOnQuatity(cart);
                 shoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.count);
             }
-
-           
-
+ 
             return View(shoppingCartVM);
         }
 
@@ -152,7 +148,6 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 						{
 							Name = item.Product.ProductName
 						}
-
 					},
 					Quantity = item.count
 				};
@@ -165,7 +160,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 			Response.Headers.Add("Location", session.Url);
 			return new StatusCodeResult(303);
 
-			return RedirectToAction(nameof(OrderConformation),new {id=shoppingCartVM.OrderHeader.OrderHeaderId});
+			return RedirectToAction(nameof(OrderConformation),new {id=shoppingCartVM.OrderHeader.OrderHeaderId}); 
 		}
 
 
@@ -174,7 +169,6 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 
 
             OrderHeader orderHeader = _unitOfWork.OrderHeader.Get(u=>u.OrderHeaderId == id,includeProperties:"ApplicationUser");
-
             if (orderHeader.PaymentStatus != SD.PaymentStatusDelayed)
             {
                 //this order of cs
@@ -182,13 +176,14 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
                 Session session = service.Get(orderHeader.SessionId);
                 if (session.PaymentStatus.ToLower() == "paid")
                 {
-					_unitOfWork.OrderHeader.UpdateStripePaymentId(id, session.Id, session.PaymentIntentId);
-                    _unitOfWork.OrderHeader.UpdateStatus(id,SD.StatusApproved,SD.PaymentStatusApproved);
+                    _unitOfWork.OrderHeader.UpdateStripePaymentId(id,session.Id,session.PaymentIntentId);
+                    _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
                     _unitOfWork.Save();
 				}
 			}
 
-            List<ShoppingCart> shoppingCarts= _unitOfWork.ShoppingCart.GetAll(u=>u.ApplicationUserId==orderHeader.ApplicationUserId).ToList();
+            List<ShoppingCart> shoppingCarts= _unitOfWork.ShoppingCart.
+                GetAll(u=>u.ApplicationUserId==orderHeader.ApplicationUserId).ToList();
             _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
             _unitOfWork.Save();
             return View(id);
