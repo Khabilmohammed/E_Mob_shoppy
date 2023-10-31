@@ -1,7 +1,7 @@
 ﻿@model ShoppingCartVM
 
 <form method="post">
-    <br />
+    <br/>
     <div class="card shadow border-0">
         <div class="card-header bg-secondary bg-gradient text-light ml-0 py-4">
             <div class="row px-4">
@@ -17,10 +17,23 @@
             <div class="row">
             </div>
             <div class="row mb-3 pb-3">
-                <div class="col-md-2 offset-md-1">
-                    <a asp-area="Customer" asp-action="Index" asp-controller="Home" class="btn btn-outline-primary text-uppercase mb-5 btn-sm"><small>Continue Shopping</small></a>
+                <div class="col">
+                    <div class="col-md-2 offset-md-1 mb-1">
+                        <a asp-area="Customer" asp-action="Index" asp-controller="Home" class="btn btn-outline-primary text-uppercase mb-5 btn-sm"><small>Continue Shopping</small></a>
+                    </div>
+                    <div class="col-md-5 offset-md-1 form-floating pt-3 row">
+                        <input type="text" class="form-control border-0" asp-for="OrderHeader.AppliedCouponCode" name="couponCode">
+                        <label class="ms-2">Coupon Code</label>
+                        <button type="submit" class="btn btn-primary btn-sm" asp-area="Customer" asp-action="ApplyCoupon"  asp-controller="Cart">Apply Coupon</button>
+                        <span class="text-danger">@TempData["CouponError"]</span>
+                       
+                    </div>
+
                 </div>
-                <div class="col-md-10 offset-md-1 pt-2">
+               
+
+                
+                <div class="col-md-10 offset-md-1 pt-3">
 
                     @foreach(var item in Model.ShoppingCartList)
                     {
@@ -78,7 +91,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2 offset-md-5">
-                        <a asp-action="summary" class="btn btn-primary border-0 bg-gradient w-100 py-2">Summary</a>
+                        <a asp-action="summary"  class="btn btn-primary border-0 bg-gradient w-100 py-2">Summary</a>
                     </div>
                 </div>
             </div>

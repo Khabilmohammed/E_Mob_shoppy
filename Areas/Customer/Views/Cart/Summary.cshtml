@@ -5,7 +5,6 @@
 	<br />
 	<div class="container">
 		<div class="card shadow border-0">
-			
 			<div class="card-header bg-secondary bg-gradient text-light ml-0 py-4">
 				<div class="row px-4">
 					<div class="col-6">
@@ -61,6 +60,7 @@
 								<div class="col-9">
 									<input asp-for="OrderHeader.City" class="form-control" />
 									<span asp-validation-for="OrderHeader.City" class="text-danger"></span>
+									<span>@Model.OrderHeader.City</span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -81,6 +81,7 @@
 									<span asp-validation-for="OrderHeader.postalCode" class="text-danger"></span>
 								</div>
 							</div>
+							
 						</div>
 						<div class="col-12 col-lg-5 offset-lg-1">
 							<h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -104,6 +105,31 @@
 									<small class="text-info">Total (INR)</small>
 									<strong class="text-info">@Model.OrderHeader.OrderTotal.ToString("c")</strong>
 								</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center">
+									<input id="couponInput" asp-for="OrderHeader.AppliedCouponCode" class="form-control" aria-required="true" placeholder="Coupon" />
+									<a id="applyCouponButton" class="eyebrow underline action">Check</a>
+								</li>
+								<li class="list-group-item d-flex justify-content-between align-items-center">
+									Coupon Discount
+									<span id="newTotal">@ViewBag.reducedAmount</span>
+								</li>
+							</ul>
+						</div>
+						<div class="card-footer py-2">
+							<ul class="list-group list-group-minimal">
+								<li class="list-group-item d-flex justify-content-between align-items-center text-dark fs-18">
+									Total
+
+									<span id="discountPrice"> </span>
+									@if (ViewBag.DiscountPrice != null)
+									{
+									<span id="discountPrice">@ViewBag.DiscountPrice</span>
+									}
+									else
+									{
+									<span>@Model.OrderHeader.OrderTotal.ToString("c")</span>
+									}  
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -124,3 +150,50 @@
 		</div>
 	</div>
 </form>
+
+@section Scripts{
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+}
+<script src="~/js/vendor.min.js"></script>
+<script src="~/js/app.js"></script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+	$(document).ready(function () {
+		$("#applyCouponButton").click(function () {
+			var coupon = $("#couponInput").val();
+			var orderTotal = "@Model.OrderHeader.OrderTotal";
+
+			var url = "/Customer/Cart/Coupon?coupon=" + coupon + "&orderTotal=" + orderTotal;
+
+			$.ajax({
+				url: url,
+				type: "GET",
+				success: function (response) {
+					// Handle the success response
+					if (response.success) {
+						var discountPrice = response.discountPrice;
+						var newTotal = response.newTotal;
+
+						// Update the UI with the discounted total
+						$("#discountPrice").text(discountPrice.toFixed(2));
+						$("#newTotal").text(newTotal.toFixed(2));
+					} else {
+						// Handle the error response, such as displaying an error message
+						console.log(response.errorMessage);
+						toastr.error(response.errorMessage);
+					}
+				},
+				error: function (xhr, status, error) {
+					// Handle the error response, such as displaying an error message
+					console.log(error);
+				}
+			});
+		});
+	});
+</script>
