@@ -36,23 +36,31 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item active">
+                 @if(User.IsInRole(SD.Role_Admin))
+                {
+                    <li class="menu-item active">
+                        <a class="menu-link" asp-area="" asp-controller="" asp-action="">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                }
+                <li class="menu-item">
                     <a class="menu-link" asp-area="Customer" asp-controller="Home" asp-action="Index">
                         <i class="icon material-icons md-home"></i>
-                        <span class="text">Dashboard</span>
+                        <span class="text">Home</span>
                     </a>
                 </li>
-                 @if (User.IsInRole(SD.Role_Admin)||User.IsInRole(SD.Role_Customer))
-                    {   
-                <li class="menu-item ">
-                    <a class="menu-link" asp-area="Admin" asp-controller="Order" asp-action="Index">
-                        <i class="icon material-icons md-home"></i>
-                        <span class="text">Manage Order</span>
-                    </a>
-                </li>
-                }
-               
-               
+                 @if(User.IsInRole(SD.Role_Admin)||User.IsInRole(SD.Role_Customer))
+                 {   
+                    <li class="menu-item ">
+                        <a class="menu-link" asp-area="Admin" asp-controller="Order" asp-action="Index">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Manage Order</span>
+                        </a>
+                    </li>
+                 }
+
                     @if (User.IsInRole(SD.Role_Admin))
                     {
                     <li class="menu-item has-submenu">
@@ -68,12 +76,7 @@
                         
                     </li>
                     }
-                    
-             
             </ul>
-
-
-
         </nav>
     </aside>
     <main class="main-wrap">

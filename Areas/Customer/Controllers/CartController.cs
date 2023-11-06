@@ -28,6 +28,8 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
+            bool isCartEmpty = true;
+
             shoppingCartVM = new()
             {
                 ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includeProperties: "Product"),
@@ -39,6 +41,12 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
             {
                 cart.Price = GetPriceBasedOnQuatity(cart);
                 shoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.count);
+                isCartEmpty = false;
+            }
+            if (isCartEmpty)
+            {
+                // You can set a message in ViewBag or ViewData to display in your view
+                ViewBag.EmptyCartMessage = "Your shopping cart is empty.";
             }
             return View(shoppingCartVM);
         }
@@ -81,71 +89,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
         }
 
 
-		/*[HttpPost]
-        public IActionResult ApplyCoupon(string couponCode)
-        {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-            shoppingCartVM = new()
-            {
-                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includeProperties: "Product"),
-                OrderHeader = new()
-            };
-
-            shoppingCartVM.OrderHeader.ApplicationUserId = userId;
-
-            shoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
-
-            shoppingCartVM.OrderHeader.Name = shoppingCartVM.OrderHeader.ApplicationUser.Name;
-            shoppingCartVM.OrderHeader.PhoneNumber = "phone Number";
-            shoppingCartVM.OrderHeader.streetAddress = "Address";
-            shoppingCartVM.OrderHeader.City = "city";
-            shoppingCartVM.OrderHeader.postalCode = "Postal code";
-            shoppingCartVM.OrderHeader.state = "state";
-
-            var validCoupon = _unitOfWork.Coupon.Get(c => c.Code == couponCode);
-            if (validCoupon != null)
-            {
-                shoppingCartVM.OrderHeader.AppliedCouponCode = validCoupon.Code;
-                shoppingCartVM.OrderHeader.DiscountAmount = validCoupon.DiscountAmount;
-
-               
-                shoppingCartVM.OrderHeader.OrderTotal = CalculateOrderTotalWithCoupon(shoppingCartVM);
-                _unitOfWork.OrderHeader.Upadte(shoppingCartVM.OrderHeader);
-                _unitOfWork.Save();
-
-                return RedirectToAction(nameof(Summary));
-            }
-            else
-            {
-                // Handle invalid coupon code
-                TempData["CouponError"] = "Invalid coupon code.";
-                return RedirectToAction(nameof(Index));
-            }
-
-        }*/
-
-
-
-		/*  private double CalculateOrderTotalWithCoupon(ShoppingCartVM cartVM)
-		  {
-
-			  // Calculate the order total with the coupon discount
-			  foreach (var cart in shoppingCartVM.ShoppingCartList)
-			  {
-				  cart.Price = GetPriceBasedOnQuatity(cart);
-				  shoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.count);
-			  }
-			  double orderTotal = shoppingCartVM.OrderHeader.OrderTotal;
-
-			  if (!string.IsNullOrEmpty(cartVM.OrderHeader?.AppliedCouponCode) && cartVM.OrderHeader.DiscountAmount != null)
-			  {
-				  // Apply the coupon discount if a valid coupon is applied
-				  orderTotal -= cartVM.OrderHeader.DiscountAmount.Value;
-			  }
-
-			  return orderTotal;
-		  }*/
+		
 		public  IActionResult Coupon(string coupon, int? OrderTotal)
 		{
 			if (string.IsNullOrEmpty(coupon) || OrderTotal == null)
@@ -176,7 +120,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 					{
 						success = true,
 						discountPrice,
-						newTotal
+						newTotal   
 					};
 
 					return Json(response); // Return the discount price
@@ -209,7 +153,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 		{
 			if (string.IsNullOrEmpty(coupon) || OrderTotal == null)
 			{
-				return 0; // Return an appropriate error response
+				return 0; 
 			}
 
 			var couponObj =  _unitOfWork.Coupon.Get(u => u.Code == coupon);
@@ -313,9 +257,11 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 			}
 			double totalAmountStripe = shoppingCartVM.OrderHeader.OrderTotal;
 			var domain = "https://localhost:44346/";
+			
 			var options = new SessionCreateOptions
 			{
-				SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={shoppingCartVM.OrderHeader.OrderHeaderId}",
+
+				SuccessUrl = domain + $"customer/cart/OrderConformation?id={shoppingCartVM.OrderHeader.OrderHeaderId}",
 				CancelUrl = domain + "customer/cart/Index",
 
 				LineItems = new List<SessionLineItemOptions>
@@ -336,7 +282,8 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 					}
 				},
 				Mode = "payment",
-			};
+		};
+
 
 			/*foreach (var item in shoppingCartVM.ShoppingCartList)
 			{
