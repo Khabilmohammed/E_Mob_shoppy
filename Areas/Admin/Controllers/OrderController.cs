@@ -13,7 +13,7 @@ using System.Security.Claims;
 namespace E_mob_shoppy.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.Role_Admin)]
+    
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -95,7 +95,6 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = SD.Role_Admin)]
         public IActionResult CancelOrder()
         {
             var orderHeader = _unitOfWork.OrderHeader.Get(u => u.OrderHeaderId == orderVm.orderHeader.OrderHeaderId);
@@ -161,16 +160,8 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
                 default: break;
 
             }
-
-
-
-
             return Json(new {data=objOrderHeaders});
-
         }
-
-		
-
 
 		#endregion
 	}

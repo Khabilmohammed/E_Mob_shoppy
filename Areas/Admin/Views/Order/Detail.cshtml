@@ -260,6 +260,15 @@
                                     <button type="submit" asp-action="CancelOrder" class="btn btn-danger form-control my-1" value="Cancel Order">Cancel Order</button>
                                 }
                             }
+                            @if (User.IsInRole(SD.Role_Customer))
+                            {
+                                if (Model.orderHeader.OrderStatus != SD.StatusRefunded &&
+                                Model.orderHeader.OrderStatus != SD.StatusCancelled &&
+                                Model.orderHeader.OrderStatus != SD.StatusShipped)
+                                {
+                                    <button type="submit" asp-action="CancelOrder" class="btn btn-danger form-control my-1" value="Cancel Order">Cancel Order</button>
+                                }
+                            }
 
                         </div>
                     </div>

@@ -39,7 +39,7 @@
                  @if(User.IsInRole(SD.Role_Admin))
                 {
                     <li class="menu-item active">
-                        <a class="menu-link" asp-area="" asp-controller="" asp-action="">
+                        <a class="menu-link" asp-area="Admin" asp-controller="DashBoard" asp-action="Index">
                             <i class="icon material-icons md-home"></i>
                             <span class="text">Dashboard</span>
                         </a>
@@ -82,10 +82,10 @@
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">
-                <form class="searchform">
+                <form class="searchform" method="get" asp-action="Index" asp-controller="Home">
                     <div class="input-group">
-                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
+                        <input list="search_terms" type="text" id="searchQuery" name="searchQuery" class="form-control" placeholder="Search term">
+                        <button class="btn btn-light bg" type="submit" id="filterButton"> <i class="material-icons md-search"></i></button>
                     </div>
 
                 </form>

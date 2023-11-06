@@ -20,10 +20,18 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchQuery, string category)
         {
             IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties:"Category") ;
-            return View(productList);
+			if (!string.IsNullOrEmpty(searchQuery))
+			{
+				productList = productList.Where(p => p.ProductName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
+			}
+			if (!string.IsNullOrEmpty(category) && category != "All category")
+			{
+				productList = productList.Where(p => p.Category.Name==category);
+			}
+			return View(productList);
         }
 
 

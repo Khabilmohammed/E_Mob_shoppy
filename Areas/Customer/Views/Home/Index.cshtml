@@ -7,51 +7,75 @@
             <h2 class="content-title card-title">Products grid</h2>
             <p>List Of items</p>
         </div>
-       
+
     </div>
     <div class="card mb-4">
         <header class="card-header">
             <div class="row gx-3">
-                <div class="col-lg-4 col-md-6 me-auto">
-                    <input type="text" placeholder="Search..." class="form-control">
-                </div>
-                <div class="col-lg-2 col-6 col-md-3">
-                    <select class="form-select">
-                        <option>All category</option>
-                        <option>Mobile</option>
-                        <option>Computer</option>
-                        <option>Something else</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-6 col-md-3">
-                    <select class="form-select">
-                        <option>Latest added</option>
-                        <option>Cheap first</option>
-                        <option>Most viewed</option>
-                    </select>
-                </div>
+                <form method="get" asp-action="Index" asp-controller="Home" class="row gx-3">
+                    <div class="col-lg-4 col-md-6 me-auto">
+                        <input type="text" placeholder="Search..." id="searchQuery" name="searchQuery" class="form-control">
+                    </div>
+                    <div class="col-lg-2 col-6 col-md-3">
+                        <select class="form-select" name="category">
+                            <option>All category</option>
+                            <option>Mobile</option>
+                            <option>Laptop</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2 col-6 col-md-3">
+                        <button type="submit" id="filterButton" class="btn btn-primary">Filter</button>
+                    </div>
+                </form>
             </div>
-        </header> 
+        </header>
         <div class="card-body">
             <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">
 
-            @foreach (var product in Model)
-            {
+                @foreach (var product in Model)
+                {
                     <div class="col">
                         <div class="card card-product-grid">
                             <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ImageUrl" width="300" height="200" alt="Product"> </a>
                             <div class="info-wrap">
-                                <a  class="title text-truncate">@product.ProductName</a>
+                                <a class="title text-truncate">@product.ProductName</a>
                                 <div class="price mb-2">@product.Listprice50.ToString("c")</div> <!-- price.// -->
                                 <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="btn btn-sm font-sm rounded btn-brand">
                                     <i class="material-icons md-edit"></i> Detail
                                 </a>
-                               
+
                             </div>
                         </div> <!-- card-product  end// -->
-                    </div> <!-- col.// -->                 
-        }
-    </div>
+                    </div> <!-- col.// -->
+                }
+            </div>
 
-</section> 
+</section>
 
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+<script src="~/js/vendor.min.js"></script>
+<script src="~/js/app.js"></script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.getElementById('filterButton').addEventListener('click', function () {
+        var searchQuery = document.getElementById('searchQuery').value;
+        // Use AJAX to send the searchQuery to your controller
+        $.ajax({
+            url: '/Home/Index/',
+            method: 'GET', 
+            data: { searchQuery: searchQuery },
+            success: function (data) {
+                // Handle the response from your controller here
+            }
+        });
+    });
+</script>
