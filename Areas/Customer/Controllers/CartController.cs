@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.Framework;
+using Stripe;
 using Stripe.Checkout;
 using System.Security.Claims;
 
@@ -51,9 +52,13 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
             return View(shoppingCartVM);
         }
 
+		public IActionResult ShowCoupon()
+		{
+            var validCoupon = _unitOfWork.Coupon.GetAll();
+            return View(validCoupon);
+		}
 
-
-        public ActionResult Summary()
+        public IActionResult Summary()
         {
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -285,7 +290,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 		};
 
 
-			/*foreach (var item in shoppingCartVM.ShoppingCartList)
+            /*foreach (var item in shoppingCartVM.ShoppingCartList)
 			{
 				var sessionLineItem = new SessionLineItemOptions
 				{
@@ -303,7 +308,21 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 				};
 				options.LineItems.Add(sessionLineItem);
 			}*/
-			var service = new SessionService();
+            foreach (var cart in shoppingCartVM.ShoppingCartList)
+            {
+                cart.Price = GetPriceBasedOnQuatity(cart);
+                shoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.count);
+
+                // Update product stock or quantity
+                var product = _unitOfWork.Product.Get(p => p.ProductId == cart.ProductId);
+                if (product != null)
+                {
+                    product.ProductQuantity -= cart.count;
+                    _unitOfWork.Product.Upadte(product);
+                }
+            }
+
+            var service = new SessionService();
 				Session session = service.Create(options);
 				_unitOfWork.OrderHeader.UpdateStripePaymentId(shoppingCartVM.OrderHeader.OrderHeaderId, session.Id, session.PaymentIntentId);
 				_unitOfWork.Save();

@@ -95,7 +95,7 @@
                                 <div class="input-group mb-3" style="width: 170px;">
 
                                     <input type="number" asp-for="count" class="form-control text-center border border-secondary" value="1" aria-label="Example text with button addon" aria-describedby="button-addon1" />
-
+                                    <span class="text-danger fw-bolder">@TempData["StockErorr"]</span>
                                 </div>
                             </div>
                         </div>
@@ -260,8 +260,5 @@
         </div>
     </div>
 </section>
-
-
-
 
 

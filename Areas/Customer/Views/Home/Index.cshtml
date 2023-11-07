@@ -34,19 +34,39 @@
 
                 @foreach (var product in Model)
                 {
-                    <div class="col">
-                        <div class="card card-product-grid">
-                            <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ImageUrl" width="300" height="200" alt="Product"> </a>
-                            <div class="info-wrap">
-                                <a class="title text-truncate">@product.ProductName</a>
-                                <div class="price mb-2">@product.Listprice50.ToString("c")</div> <!-- price.// -->
-                                <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="btn btn-sm font-sm rounded btn-brand">
-                                    <i class="material-icons md-edit"></i> Detail
-                                </a>
+                    if (product.ProductQuantity <= 0)
+                    {
+                        <div class="col">
+                            <div class="card card-product-grid">
+                                <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ImageUrl" width="300" height="200" alt="Product"> </a>
+                                <div class="info-wrap">
+                                    <a class="title text-truncate">@product.ProductName</a>
+                                    <div class="price mb-2">@product.Listprice50.ToString("c")</div> <!-- price.// -->
+                                    <a disable class="text-danger fw-bold">
+                                        <i class="material-icons md-edit"></i> Out Of Stock
+                                    </a>
 
-                            </div>
-                        </div> <!-- card-product  end// -->
-                    </div> <!-- col.// -->
+                                </div>
+                            </div> <!-- card-product  end// -->
+                        </div> <!-- col.// -->
+                    }
+                    else
+                    {
+                        <div class="col">
+                            <div class="card card-product-grid">
+                                <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ImageUrl" width="300" height="200" alt="Product"> </a>
+                                <div class="info-wrap">
+                                    <a class="title text-truncate">@product.ProductName</a>
+                                    <div class="price mb-2">@product.Listprice50.ToString("c")</div> <!-- price.// -->
+                                    <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="btn btn-sm font-sm rounded btn-brand">
+                                        <i class="material-icons md-edit"></i> Detail
+                                    </a>
+
+                                </div>
+                            </div> <!-- card-product  end// -->
+                        </div> <!-- col.// -->
+                    }
+                    
                 }
             </div>
 

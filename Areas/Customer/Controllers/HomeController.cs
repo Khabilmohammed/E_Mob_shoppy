@@ -56,8 +56,16 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
             shoppingCart.ApplicationUserId=userId;
 
             ShoppingCart cartFromDb=_unitOfWork.ShoppingCart.Get(u=>u.ApplicationUserId==userId && u.ProductId==shoppingCart.ProductId);
+            Product product = _unitOfWork.Product.Get(p => p.ProductId == shoppingCart.ProductId);
 
-            if(cartFromDb != null)
+            if (shoppingCart.count > product.ProductQuantity)
+            {
+                var quantiy = product.ProductQuantity;
+                TempData["StockErorr"] = "Reduce the quantity you have entered !!!! stock is only up to "+quantiy;
+                return RedirectToAction(nameof(Details));
+
+            }
+            if (cartFromDb != null)
             {
                 cartFromDb.count += shoppingCart.count;
                 _unitOfWork.ShoppingCart.Upadte(cartFromDb );
