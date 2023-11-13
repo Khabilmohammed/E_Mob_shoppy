@@ -269,6 +269,16 @@
                                     <button type="submit" asp-action="CancelOrder" class="btn btn-danger form-control my-1" value="Cancel Order">Cancel Order</button>
                                 }
                             }
+                            @if (User.IsInRole(SD.Role_Customer)||User.IsInRole(SD.Role_Admin))
+                            {
+                                if (Model.orderHeader.OrderStatus != SD.StatusRefunded &&
+                                Model.orderHeader.OrderStatus != SD.StatusCancelled &&
+                                Model.orderHeader.OrderStatus == SD.StatusShipped)
+                                {
+
+                                    <button class="btn btn-danger form-control my-1" asp-action="Invoice" asp-controller="Order" asp-route-orderId="@Model.orderHeader.OrderHeaderId">Download Invoice</button>
+                                }
+                            }
 
                         </div>
                     </div>
@@ -300,8 +310,15 @@
             }   
             return true;
         }
+
     </script>
 }
+
+
+
+
+
+
 
 
                                 

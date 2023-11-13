@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using E_mob_shoppy.Utility;
 using Stripe;
+using DinkToPdf.Contracts;
+using DinkToPdf;
 
 namespace E_mob_shoppy
 {
@@ -24,17 +26,17 @@ namespace E_mob_shoppy
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+          
 
-            
             builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-
+            
             builder.Services.ConfigureApplicationCookie(option =>
             {
                 option.LoginPath = $"/Identity/Account/Login";
                 option.LogoutPath = $"/Identity/Account/Logout";
                 option.AccessDeniedPath = "/Identity/Account/AccessDenied";
             });
-
+            
             builder.Services.AddAuthentication().AddGoogle(option =>
             {
                 option.ClientId = "454370760301-hupnkkjm6vb4k2s6nqjrp5sjj3kt5f7v.apps.googleusercontent.com";
@@ -53,8 +55,10 @@ namespace E_mob_shoppy
                 app.UseHsts();
             }
 
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
             StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
             app.UseRouting();
             app.UseAuthentication();
