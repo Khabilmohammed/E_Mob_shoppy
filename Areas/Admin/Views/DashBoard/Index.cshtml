@@ -7,7 +7,7 @@
             <p>Whole data about your business here</p>
         </div>
         <div>
-            <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>
+            <a asp-action="Invoice" asp-controller="DashBoard" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>
         </div>
     </div>
     <div class="row">
@@ -122,7 +122,16 @@
             </div>
         </div>
     </div>
-    
+    <div class="row">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card mb-4">
+                <article class="card-body">
+                    <h5 class="card-title">Sale statistics</h5>
+                    <canvas id="myChart" height="80px"></canvas>
+                </article>
+            </div>
+        </div>
+    </div>
     <div class="card mb-4">
         <header class="card-header">
             <div class="row align-items-center">
@@ -334,3 +343,43 @@
     
     
 </section>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+        $.ajax({
+            type: "POST",
+            url: "/Admin/DashBoard/Index",
+            data: {},
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: OnSuccessResult,
+            error: OnError
+        });
+        function OnSuccessResult(data) {
+            var _data = data;
+            var chartLabels = data.chartLabels;
+            var chartData = data.chartData;
+            
+            var barColor = ["red", "green", "orange", "brown", "purple"];
+            console.log("Server Response:", data);
+            console.log("Chart Labels:", chartLabels);
+            console.log("Chart Data:", chartData);
+            new Chart("myChart", {
+                type: "bar",
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        backgroundColor: barColor,
+                        data: chartData
+                    }]
+                }
+            });
+        }
+        function OnError(err) {
+           
+        }
+    });
+</script>
