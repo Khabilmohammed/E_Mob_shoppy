@@ -311,7 +311,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
             foreach (var cart in shoppingCartVM.ShoppingCartList)
             {
                 cart.Price = GetPriceBasedOnQuatity(cart);
-                shoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.count);
+                shoppingCartVM.OrderHeader.OrderTotal = (cart.Price * cart.count);
 
                 // Update product stock or quantity
                 var product = _unitOfWork.Product.Get(p => p.ProductId == cart.ProductId);

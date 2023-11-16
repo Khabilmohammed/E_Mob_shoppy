@@ -5,12 +5,13 @@ using E_mob_shoppy.Models;
 using E_mob_shoppy.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 
 namespace E_mob_shoppy.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles =SD.Role_Admin)]
+    [Authorize]
     public class CouponController : Controller
     {
         private readonly IUnitOfWork _UnitOfWork;
@@ -30,6 +31,7 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = SD.Role_Admin)]
         public  IActionResult Create(Coupon obj)
         {
             var coupenExist =  _UnitOfWork.Coupon.Get(u => u.Code == obj.Code);
@@ -69,6 +71,17 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
             if (couponFromDb == null)
                 return NotFound();
             return View(couponFromDb);
+        }
+        
+        public ActionResult wallet()
+        {
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            
+            var walletExist = _UnitOfWork.ApplicationUser.Get(u => u.Id==userId);
+            
+            return View(walletExist);
         }
 
         [HttpPost]
