@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Wishlist>
+
+<section class="content-main">
+    <form method="post">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">WishList </h2>
+                <p>All Your Favourites Are Here.</p>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col">
+                            <div class="card card-product-grid">
+                                <a href="#" class="img-flud" width="300" height="200"> <img src="@item.Product.ImageUrl" alt="Product" width="300" height="200"> </a>
+                                <div class="info-wrap">
+                                    <a href="#" class="title text-truncate">@item.Product.ProductName</a>
+                                    <div class="price mb-2">$@item.Product.ListPrice</div>
+                                    <a asp-action="Details" asp-controller="Home" asp-route-id="@item.Product.ProductId" class="btn btn-sm font-sm rounded btn-brand">
+                                        <i class="material-icons md-edit"></i> Add to cart
+                                    </a>
+                                    <a asp-action="RemoveFromWishlist" asp-controller="Wishlist" asp-route-id="@item.WishlistId" class="btn btn-sm font-sm btn-danger rounded">
+                                        <i class="material-icons md-delete_forever"></i> Delete
+                                    </a>
+                                </div>
+                            </div> <!-- card-product  end// -->
+                        </div> <!-- col.// -->
+                    }
+
+
+                </div> <!-- row.// -->
+            </div> <!-- card-body end// -->
+        </div> <!-- card end// -->
+        <div class="pagination-area mt-30 mb-50">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-start">
+                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#">16</a></li>
+                    <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </form>
+</section> <!-- content-main end// -->
