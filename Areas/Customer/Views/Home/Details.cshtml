@@ -19,25 +19,57 @@
                                 <div class="row gx-5">
                                     <aside class="col-lg-6">
                                         <div class="mb-3 d-flex justify-content-center " data-imagezoom="true">
-                                            <a data-fslightbox="mygalley" class="" target="_blank" data-type="image">
-                                                <img style="max-width: 100%; max-height: 100vh; margin: auto;" data-imagezoom="true" class="rounded-4 fit" src="@Model.Product.ImageUrl" />
-                                            </a>
-                                        </div>
-                                        <div class="d-flex justify-content-center mb-3">
-                                            <a data-fslightbox="mygalley" class=" img-fluid mx-1 rounded-2" target="_blank" data-type="image" class="item-thumb">
-                                                <img width="60" height="60" class="rounded-2" class="img-fluid" src="@Model.Product.ImageUrl" />
-                                            </a>
-                                            <a data-fslightbox="mygalley" class=" rounded-2 mx-1" target="_blank" data-type="image" class="item-thumb">
-                                                <img width="60" height="60" class="rounded-2" src="@Model.Product.ImageUrl" />
-                                            </a>
-                                            <a data-fslightbox="mygalley" class=" rounded-2 mx-1" target="_blank" data-type="image" class="item-thumb">
-                                                <img width="60" height="60" class="rounded-2" src="@Model.Product.ImageUrl" />
-                                            </a>
-                                            <a data-fslightbox="mygalley" class=" rounded-2 mx-1" target="_blank" data-type="image" class="item-thumb">
-                                                <img width="60" height="60" class="rounded-2" src="@Model.Product.ImageUrl" />
-                                            </a>
+                                            @if (Model.Product.ProductImages != null && Model.Product.ProductImages.Count() > 0)
+                                            {
+                                                <a data-fslightbox="mygalley" class="" target="_blank" data-type="image">
+                                                    <img style="max-width: 100%; max-height: 100vh; margin: auto;" data-imagezoom="true" class="rounded-4 fit" src="@Model.Product.ProductImages.FirstOrDefault().ImageUrl" />
+                                                </a>
 
+
+                                            }
+                                            else
+                                            {
+                                                <a data-fslightbox="mygalley" class="" target="_blank" data-type="image">
+                                                    <img style="max-width: 100%; max-height: 100vh; margin: auto;" data-imagezoom="true" class="rounded-4 fit" src="https://placehold.co/300x200" />
+                                                </a>
+                                            }
                                         </div>
+                                        @if (Model.Product.ProductImages != null && Model.Product.ProductImages.Count() > 0)
+                                        {
+                                            <div class="d-flex justify-content-center mb-3">
+                                                @foreach (var image in Model.Product.ProductImages)
+                                                {
+                                                    int count = 0;
+                                                    if (count <= 4)
+                                                    {
+                                                        count++;
+                                                        <a data-fslightbox="mygalley" class=" img-fluid mx-1 rounded-2" target="_blank" data-type="image" class="item-thumb">
+                                                            <img width="60" height="60" class="rounded-2" class="img-fluid" src="@image.ImageUrl" />
+                                                        </a>
+                                                    }
+                                                   
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="d-flex justify-content-center mb-3">
+                                                <a data-fslightbox="mygalley" class=" img-fluid mx-1 rounded-2" target="_blank" data-type="image" class="item-thumb">
+                                                    <img width="60" height="60" class="rounded-2" class="img-fluid" src="https://placehold.co/300x200" />
+                                                </a>
+                                                <a data-fslightbox="mygalley" class=" rounded-2 mx-1" target="_blank" data-type="image" class="item-thumb">
+                                                    <img width="60" height="60" class="rounded-2" src="https://placehold.co/300x200" />
+                                                </a>
+                                                <a data-fslightbox="mygalley" class=" rounded-2 mx-1" target="_blank" data-type="image" class="item-thumb">
+                                                    <img width="60" height="60" class="rounded-2" src="https://placehold.co/300x200" />
+                                                </a>
+                                                <a data-fslightbox="mygalley" class=" rounded-2 mx-1" target="_blank" data-type="image" class="item-thumb">
+                                                    <img width="60" height="60" class="rounded-2" src="https://placehold.co/300x200" />
+                                                </a>
+
+                                            </div>
+                                        }
+
                                     </aside>
                                     <main class="col-lg-6" style="background-color:white">
                                         <div class="ps-lg-3">
@@ -87,7 +119,7 @@
                                             <hr />
 
                                             <div class="row mb-4">
-                                               
+
                                                 <!-- col.// -->
                                                 <div class="col-md-4 col-6 mb-3">
                                                     <label class="mb-2 d-block">Quantity</label>
@@ -108,7 +140,7 @@
                         </section>
 
                     </form>
-            </div> <!-- .row // -->
-        </div> <!-- card body .// -->
-    </div> <!-- card .// -->
+                </div> <!-- .row // -->
+            </div> <!-- card body .// -->
+        </div> <!-- card .// -->
 </section> <!-- content-main end// -->

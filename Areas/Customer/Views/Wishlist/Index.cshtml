@@ -15,7 +15,17 @@
                     {
                         <div class="col">
                             <div class="card card-product-grid">
-                                <a href="#" class="img-flud" width="300" height="200"> <img src="@item.Product.ImageUrl" alt="Product" width="300" height="200"> </a>
+                                @if (item.Product.ProductImages != null)
+                                {
+                                    <a href="#" class="img-flud" width="300" height="200"> <img src="@item.Product.ProductImages.FirstOrDefault().ImageUrl" alt="Product" width="300" height="200"> </a>
+
+                                }
+                                else
+                                {
+                                    <a href="#" class="img-flud" width="300" height="200"> <img src="https://placehold.co/300x200" alt="Product" width="300" height="200"> </a>
+
+                                }
+                          
                                 <div class="info-wrap">
                                     <a href="#" class="title text-truncate">@item.Product.ProductName</a>
                                     <div class="price mb-2">$@item.Product.ListPrice</div>

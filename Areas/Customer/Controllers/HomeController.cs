@@ -22,7 +22,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 
         public IActionResult Index(string searchQuery, string category)
         {
-            IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties:"Category") ;
+            IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties:"Category,ProductImages") ;
 			if (!string.IsNullOrEmpty(searchQuery))
 			{
 				productList = productList.Where(p => p.ProductName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
@@ -40,7 +40,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
         {
             ShoppingCart cart = new()
             {
-                Product = _unitOfWork.Product.Get(u => u.ProductId == id, includeProperties: "Category"),
+                Product = _unitOfWork.Product.Get(u => u.ProductId == id, includeProperties: "Category,ProductImages"),
                 count = 1,
                 ProductId = id
             };

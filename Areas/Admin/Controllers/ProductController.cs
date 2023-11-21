@@ -7,7 +7,9 @@ using E_mob_shoppy.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Stripe;
 using System.Collections.Generic;
+using Product = E_mob_shoppy.Models.Product;
 
 namespace E_mob_shoppy.Areas.Admin.Controllers
 {
@@ -53,44 +55,17 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
             }
             else
             {
-                productVM.Product=_unitOfWork.Product.Get(u=>u.ProductId == id);
+                productVM.Product = _unitOfWork.Product.Get(u => u.ProductId == id, includeProperties: "ProductImages") ;
                 return View(productVM);
             }
            
         }
         [HttpPost]
-        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
+        public IActionResult Upsert(ProductVM productVM,List<IFormFile> files)
         {
             
             if (ModelState.IsValid)
             {
-                string wwwRootPath = _webHostEnvironment.WebRootPath;
-                if (file != null)
-                {
-                    string fileName=Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string productPath= Path.Combine(wwwRootPath, @"Images\Product");
-                    if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
-                    {
-                        //delete the old image
-                        var OldImagePath=
-                            Path.Combine(wwwRootPath,productVM.Product.ImageUrl.TrimStart('\\'));
-
-                        if(System.IO.File.Exists(OldImagePath))
-                        {
-                            System.IO.File.Delete(OldImagePath);
-                        }
-                    }
-
-
-                    using (var filestream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
-                    {
-                        file.CopyTo(filestream);
-                    }
-
-                    productVM.Product.ImageUrl = @"\Images\Product\" + fileName;
-                   
-                }
-
                 if (productVM.Product.ProductId == 0)
                 {
                     _unitOfWork.Product.Add(productVM.Product);
@@ -99,9 +74,49 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
                 {
                     _unitOfWork.Product.Upadte(productVM.Product);
                 }
-               
+
                 _unitOfWork.Save();
-                TempData["success"] = "The Data is Created";
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (files != null)
+                {
+                    foreach (IFormFile file in files) 
+                    {
+
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string productPath = @"Images\Products\product-" + productVM.Product.ProductId;
+                        string finalPath = Path.Combine(wwwRootPath, productPath);
+
+                        if (!Directory.Exists(finalPath))
+                        {
+                            Directory.CreateDirectory(finalPath);
+                        }
+
+                        using (var filestream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(filestream);
+                        }
+
+                        ProductImage productImage = new()
+                        {
+                            ImageUrl= @"\"+productPath+@"\"+fileName,
+                            ProductId=productVM.Product.ProductId,
+                        };
+
+                        if (productVM.Product.ProductImages == null)
+                        {
+                            productVM.Product.ProductImages = new List<ProductImage>(); 
+                        }
+
+                        productVM.Product.ProductImages.Add(productImage);
+
+                    }
+                    _unitOfWork.Product.Upadte(productVM.Product);
+                    _unitOfWork.Save();
+                  
+                }
+
+
+                TempData["success"] = "The Data is Created/updated Successfully";
                 return RedirectToAction("Index", "Product");
             }
             else
@@ -117,7 +132,32 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
             }
         }
 
+        public IActionResult DeleteImage(int ImageId)
+        {
+            var imageToBeDeleted = _unitOfWork.ProductImage.Get(u => u.productImageId == ImageId);
+            int productId = imageToBeDeleted.ProductId;
+            if (imageToBeDeleted != null)
+            {
+                if (!string.IsNullOrEmpty(imageToBeDeleted.ImageUrl))
+                {
 
+                    var OldImagePath =
+                         Path.Combine(_webHostEnvironment.WebRootPath,
+                         imageToBeDeleted.ImageUrl.TrimStart('\\'));
+
+                    if (System.IO.File.Exists(OldImagePath))
+                    {
+                        System.IO.File.Delete(OldImagePath);
+                    }
+
+                }
+                _unitOfWork.ProductImage.Remove(imageToBeDeleted);
+                _unitOfWork.Save();
+                TempData["success"] = "Deleted successfully";
+            }
+
+            return RedirectToAction(nameof(Upsert), new { id = productId });
+        }
        
 
 
@@ -138,13 +178,26 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
             {
                 return Json(new {sucess=false,message="Eroor while deleting"});
             }
-            var OldImagePath =
-                          Path.Combine(_webHostEnvironment.WebRootPath,
-                          producteToBeDeleted.ImageUrl.TrimStart('\\'));
+            /* var OldImagePath =
+                           Path.Combine(_webHostEnvironment.WebRootPath,
+                           producteToBeDeleted.ImageUrl.TrimStart('\\'));
 
-            if (System.IO.File.Exists(OldImagePath))
+             if (System.IO.File.Exists(OldImagePath))
+             {
+                 System.IO.File.Delete(OldImagePath);
+             }*/
+            string productPath = @"Images\Products\product-" + id;
+            string finalPath = Path.Combine(_webHostEnvironment.WebRootPath, productPath);
+
+            if (!Directory.Exists(finalPath))
             {
-                System.IO.File.Delete(OldImagePath);
+                string[] filePath = Directory.GetFiles(finalPath);
+
+                foreach (string filePath2 in filePath)
+                {
+                    System.IO.File.Delete(filePath2);
+                }
+                Directory.Delete(finalPath);
             }
 
             _unitOfWork.Product.Remove(producteToBeDeleted);

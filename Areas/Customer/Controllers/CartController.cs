@@ -38,8 +38,10 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 
             };
 
+			IEnumerable<ProductImage> productImages = _unitOfWork.ProductImage.GetAll();
             foreach (var cart in shoppingCartVM.ShoppingCartList)
             {
+				cart.Product.ProductImages = productImages.Where(u => u.ProductId == cart.Product.ProductId).ToList();
                 cart.Price = GetPriceBasedOnQuatity(cart);
                 shoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.count);
                 isCartEmpty = false;

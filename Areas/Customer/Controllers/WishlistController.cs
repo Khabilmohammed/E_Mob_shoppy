@@ -26,7 +26,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
            
             var WishlistItems = _unitOfWork.Wishlist.GetAll(
                 u => u.ApplicationUserId == userId,
-                includeProperties: "Product" 
+                includeProperties: "Product.ProductImages"
             );
 
             return View(WishlistItems);
@@ -36,16 +36,21 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            Product product = _unitOfWork.Product.Get(p => p.ProductId == productId);
+          
+            
             var existingWishlistItem = _unitOfWork.Wishlist.Get(u => u.ApplicationUserId == claim.Value && u.ProductId == productId);
+            Product product = _unitOfWork.Product.Get(p => p.ProductId == productId);
+           
+           
             if (existingWishlistItem == null)
             { 
                 var newWishlistItem = new Wishlist
                 {
+                    
                     ApplicationUserId = claim.Value,
                     ProductId = productId,
                     Description = product.ProductDescription,
-                    ProductName=product.ProductName
+                    ProductName=product.ProductName,
                     
                 };
 

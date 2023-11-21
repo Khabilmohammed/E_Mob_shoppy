@@ -38,7 +38,14 @@
                     {
                         <div class="col">
                             <div class="card card-product-grid">
-                                <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ImageUrl" width="300" height="200" alt="Product"> </a>
+                                @if (product.ProductImages != null&&product.ProductImages.Count()>0)
+                                {
+                                      <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ProductImages.FirstOrDefault().ImageUrl" width="300" height="200" alt="Product"> </a>
+
+                                }else{
+
+                                    <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="https://placehold.co/300x200" width="300" height="200" alt="Product"> </a>
+                                }
                                 <div class="info-wrap">
                                     <a class="title text-truncate">@product.ProductName</a>
                                     <div class="price mb-2">@product.Listprice50.ToString("c")</div> <!-- price.// -->
@@ -54,7 +61,17 @@
                     {
                         <div class="col">
                             <div class="card card-product-grid">
-                                <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ImageUrl" width="300" height="200" alt="Product"> </a>
+                                @if (product.ProductImages != null && product.ProductImages.Count() > 0)
+                                {
+                                    <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ProductImages.FirstOrDefault().ImageUrl" width="300" height="200" alt="Product"> </a>
+
+                                }
+                                else
+                                {
+
+                                    <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="https://placehold.co/300x200" width="300" height="200" alt="Product"> </a>
+                                }
+                               @*  <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ImageUrl" width="300" height="200" alt="Product"> </a> *@
                                 <div class="info-wrap">
                                     <a class="title text-truncate">@product.ProductName</a>
                                     <div class="price mb-2">@product.Listprice50.ToString("c")</div> <!-- price.// -->
