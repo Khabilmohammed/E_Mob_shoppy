@@ -38,11 +38,13 @@
                     {
                         <div class="col">
                             <div class="card card-product-grid">
-                                @if (product.ProductImages != null&&product.ProductImages.Count()>0)
+                                @if (product.ProductImages != null && product.ProductImages.Count() > 0)
                                 {
-                                      <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ProductImages.FirstOrDefault().ImageUrl" width="300" height="200" alt="Product"> </a>
+                                    <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ProductImages.FirstOrDefault().ImageUrl" width="300" height="200" alt="Product"> </a>
 
-                                }else{
+                                }
+                                else
+                                {
 
                                     <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="https://placehold.co/300x200" width="300" height="200" alt="Product"> </a>
                                 }
@@ -71,7 +73,7 @@
 
                                     <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="https://placehold.co/300x200" width="300" height="200" alt="Product"> </a>
                                 }
-                               @*  <a asp-action="Details" asp-controller="Home" asp-route-id="@product.ProductId" class="img-flud" width="300" height="200"> <img src="@product.ImageUrl" width="300" height="200" alt="Product"> </a> *@
+                               
                                 <div class="info-wrap">
                                     <a class="title text-truncate">@product.ProductName</a>
                                     <div class="price mb-2">@product.Listprice50.ToString("c")</div> <!-- price.// -->
@@ -83,11 +85,43 @@
                             </div> <!-- card-product  end// -->
                         </div> <!-- col.// -->
                     }
-                    
+
                 }
             </div>
-            
+        </div>
+    </div>
+    <div class="pagination-area mt-30 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <ul class="pagination justify-content-start">
+                    @if (ViewBag.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1})" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    }
 
+                    @for (int i = ViewBag.CurrentPage; i <= ViewBag.CurrentPage; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+                    }
+
+                    @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </ul>
+        </nav>
+    </div>
 </section>
 
 
@@ -109,7 +143,7 @@
         // Use AJAX to send the searchQuery to your controller
         $.ajax({
             url: '/Home/Index/',
-            method: 'GET', 
+            method: 'GET',
             data: { searchQuery: searchQuery },
             success: function (data) {
                 // Handle the response from your controller here

@@ -76,11 +76,11 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
             shoppingCartVM.OrderHeader.ApplicationUserId=userId;
 			shoppingCartVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
             shoppingCartVM.OrderHeader.Name=shoppingCartVM.OrderHeader.ApplicationUser.Name;
-            shoppingCartVM.OrderHeader.PhoneNumber = shoppingCartVM.OrderHeader.PhoneNumber;
-            shoppingCartVM.OrderHeader.streetAddress = shoppingCartVM.OrderHeader.streetAddress;
-            shoppingCartVM.OrderHeader.City = shoppingCartVM.OrderHeader.City;
-            shoppingCartVM.OrderHeader.postalCode = shoppingCartVM.OrderHeader.postalCode;
-            shoppingCartVM.OrderHeader.state = shoppingCartVM.OrderHeader.state;
+            shoppingCartVM.OrderHeader.PhoneNumber = shoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
+            shoppingCartVM.OrderHeader.streetAddress = shoppingCartVM.OrderHeader.ApplicationUser.StreetAddress;
+            shoppingCartVM.OrderHeader.City = shoppingCartVM.OrderHeader.ApplicationUser.City;
+            shoppingCartVM.OrderHeader.postalCode = shoppingCartVM.OrderHeader.ApplicationUser.PostalCode;
+            shoppingCartVM.OrderHeader.state = shoppingCartVM.OrderHeader.ApplicationUser.State;
             
             
            

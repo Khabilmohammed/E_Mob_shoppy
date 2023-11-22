@@ -2,6 +2,7 @@
 using E_mob_shoppy.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PdfSharpCore;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -20,7 +21,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index(string searchQuery, string category)
+        public IActionResult Index(string searchQuery, string category, int page = 1, int pageSize = 20)
         {
             IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties:"Category,ProductImages") ;
 			if (!string.IsNullOrEmpty(searchQuery))
@@ -31,7 +32,15 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 			{
 				productList = productList.Where(p => p.Category.Name==category);
 			}
-			return View(productList);
+
+            int totalProducts = productList.Count();
+            int totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
+            productList = productList.Skip((page - 1) * pageSize).Take(pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            return View(productList);
         }
 
 

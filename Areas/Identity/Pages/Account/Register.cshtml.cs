@@ -112,6 +112,11 @@ namespace E_mob_shoppy.Areas.Identity.Pages.Account
             [Required]
             public string Name { get; set; }
             
+            public string? StreetAdress {  get; set; }  
+            public string? State {  get; set; }
+            public string? PostalCode {  get; set; }
+
+            public string? PhoneNumber {  get; set; }
             public string? City{ get; set; }
             
         }
@@ -151,6 +156,11 @@ namespace E_mob_shoppy.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.Name = Input.Name;
                 user.City = Input.City;
+                user.StreetAddress = Input.StreetAdress;
+                user.PostalCode = Input.PostalCode;
+                user.PhoneNumber = Input.PhoneNumber;
+                user.State=Input.State;
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)

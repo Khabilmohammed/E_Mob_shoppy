@@ -9,38 +9,66 @@
                 <div class="card-body ">
             <h4 class="card-title mb-4 text-center">Create an Account</h4>
             <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div class="col-md-12 row">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="mb-3 col-md-12">
+                        <label asp-for="Input.Name" class="form-label">Name</label>
+                        <input class="form-control" asp-for="Input.Name" placeholder="Your Name" type="text">
+                        <span asp-validation-for="Input.Name" class="text-danger"></span>
+                    </div> <!-- form-group// -->
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="form-label">Email</label>
+                        <input class="form-control" asp-for="Input.Email" placeholder="Your email" autocomplete="username" aria-required="true" type="text">
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div> <!-- form-group// -->
+                    <div class="mb-3">
+                        <label asp-for="Input.StreetAdress" class="form-label">StreetAdress</label>
+                        <input class="form-control" asp-for="Input.StreetAdress" placeholder="Your StreetAdress">
+                        <span asp-validation-for="Input.StreetAdress" class="text-danger"></span>
+                    </div> <!-- form-group// -->
+                    <div class="mb-3">
+                        <label asp-for="Input.State" class="form-label">State</label>
+                        <input class="form-control" asp-for="Input.State" placeholder="Your State">
+                        <span asp-validation-for="Input.State" class="text-danger"></span>
+                    </div> <!-- form-group// -->
+                    <div class="mb-3">
+                        <label asp-for="Input.City" class="form-label">City</label>
+                        <input class="form-control" asp-for="Input.City" placeholder="Your City">
+                        <span asp-validation-for="Input.City" class="text-danger"></span>
+                    </div> <!-- form-group// -->
+                    <div class="mb-3">
+                        <label asp-for="Input.PostalCode" class="form-label">PostalCode</label>
+                        <input class="form-control" asp-for="Input.PostalCode" placeholder="Your PostalCode">
+                        <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
+                    </div> <!-- form-group// -->
+                    <div class="mb-3">
+                        <label asp-for="Input.PhoneNumber" class="form-label">PhoneNumber</label>
+                        <input class="form-control" asp-for="Input.PhoneNumber" placeholder="Your PhoneNumber">
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                    </div> <!-- form-group// -->
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Input.Password">Create password</label>
+                        <input class="form-control" asp-for="Input.Password" autocomplete="new-password" aria-required="true" placeholder="Password" type="password">
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div> <!-- form-group// -->
+                    <div class="mb-3">
+                        <label class="form-label" asp-for="Input.ConfirmPassword">Create password</label>
+                        <input class="form-control" asp-for="Input.ConfirmPassword" autocomplete="new-password" aria-required="true" placeholder="Password" type="password">
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
 
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="mb-3">
-                    <label asp-for="Input.Name" class="form-label">Name</label>
-                    <input class="form-control" asp-for="Input.Name" placeholder="Your Name"  type="text">
-                    <span asp-validation-for="Input.Name" class="text-danger"></span>
-                </div> <!-- form-group// -->
-                <div class="mb-3">
-                    <label asp-for="Input.Email" class="form-label">Email</label>
-                    <input class="form-control" asp-for="Input.Email" placeholder="Your email" autocomplete="username" aria-required="true" type="text">
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div> <!-- form-group// -->
-              
-                <div class="mb-3">
-                    <label class="form-label" asp-for="Input.Password">Create password</label>
-                    <input class="form-control" asp-for="Input.Password" autocomplete="new-password" aria-required="true" placeholder="Password" type="password">
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div> <!-- form-group// -->
-                <div class="mb-3">
-                    <label class="form-label" asp-for="Input.ConfirmPassword">Create password</label>
-                    <input class="form-control" asp-for="Input.ConfirmPassword" autocomplete="new-password" aria-required="true" placeholder="Password" type="password">
-                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+
+
+                    <div class="mb-3">
+                        <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
+                            <option disabled selected>--Select Role--</option>
+                        </select>
+                    </div>
+
+
+
                 </div>
-
-
-
-                <div class="mb-3">
-                    <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
-                        <option disabled selected>--Select Role--</option>
-                    </select>
-                </div>
-
+               
 
                
                 <div class="mb-3">
