@@ -110,9 +110,13 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
                 var refundAmount = orderHeader.OrderTotal;
                 var AppUser =  _unitOfWork.ApplicationUser.Get(u => u.Id == orderHeader.ApplicationUserId);
                 var WalletExistingAmount = AppUser.wallet;
+                if (WalletExistingAmount == null)
+                {
+                    WalletExistingAmount = 0;
+                }
                 if (refundAmount > 0)
                 {
-                    AppUser.wallet = WalletExistingAmount+refundAmount;
+                    AppUser.wallet = WalletExistingAmount + refundAmount;
                     _unitOfWork.ApplicationUser.Upadte(AppUser);
                 }
                 var options = new RefundCreateOptions
