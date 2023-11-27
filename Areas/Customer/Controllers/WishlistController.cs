@@ -22,13 +22,15 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-
            
+
             var WishlistItems = _unitOfWork.Wishlist.GetAll(
                 u => u.ApplicationUserId == userId,
                 includeProperties: "Product.ProductImages"
             );
+           
 
+          
             return View(WishlistItems);
         }
         [HttpPost]

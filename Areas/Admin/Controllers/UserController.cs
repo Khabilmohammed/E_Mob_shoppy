@@ -17,7 +17,7 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
             _db = db;
         }
 
-        public ActionResult Index() 
+        public IActionResult Index() 
         {
             return View();
         
@@ -25,11 +25,35 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
 
         #region API CALLS
         [HttpGet]
-        public ActionResult Get()
+        public IActionResult Get()
         {
             List<ApplicationUser> userlist= _db.ApplicationUsers.ToList();
             return Json(new {data= userlist });
                 
+        }
+
+
+        [HttpPost]
+        public IActionResult LockUnlock([FromBody]string id)
+        {
+            var objFromDb = _db.ApplicationUsers.FirstOrDefault(u => u.Id == id);
+            if (objFromDb == null)
+            {
+                return Json(new { success = false, message = "Error while Locking/Unlocking" });
+            }
+            if(objFromDb.LockoutEnd!=null && objFromDb.LockoutEnd > DateTime.Now)
+            {
+                //user is currently locked in and we need to unlock them
+                objFromDb.LockoutEnd = DateTime.Now;
+            }
+            else
+            {
+                objFromDb.LockoutEnd= DateTime.Now.AddYears(1000);
+            }
+
+            _db.SaveChanges();
+
+            return Json(new { success = true, message = "Delete Successful" });
         }
 
 

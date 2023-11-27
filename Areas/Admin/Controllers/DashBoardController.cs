@@ -47,15 +47,15 @@ namespace E_mob_shoppy.Areas.Admin.Controllers
 
             // Filter orders for the last three weeks
             IEnumerable<OrderHeader> ordersWeek1 = orderHeaders
-                .Where(order => order.OrderDate >= lastWeek1 && order.OrderDate <= today)
-                .OrderByDescending(order => order.OrderDate);
+     .Where(order => order.OrderDate >= today && order.OrderDate <= lastWeek1)
+     .OrderByDescending(order => order.OrderDate);
 
             IEnumerable<OrderHeader> ordersWeek2 = orderHeaders
-                .Where(order => order.OrderDate >= lastWeek2 && order.OrderDate < lastWeek1)
+                .Where(order => order.OrderDate >= lastWeek1 && order.OrderDate < lastWeek2)
                 .OrderByDescending(order => order.OrderDate);
 
             IEnumerable<OrderHeader> ordersWeek3 = orderHeaders
-                .Where(order => order.OrderDate >= lastWeek1 && order.OrderDate < lastWeek2)
+                .Where(order => order.OrderDate >= lastWeek1 && order.OrderDate <= lastWeek2)
                 .OrderByDescending(order => order.OrderDate);
 
 

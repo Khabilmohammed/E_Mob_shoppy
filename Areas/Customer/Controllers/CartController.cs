@@ -101,7 +101,7 @@ namespace E_mob_shoppy.Areas.Customer.Controllers
 		{
 			if (string.IsNullOrEmpty(coupon) || OrderTotal == null)
 			{
-				return BadRequest(); // Return an appropriate error response
+				return BadRequest(); 
 			}
 
 			var validCoupon =  _unitOfWork.Coupon.Get(u => u.Code == coupon);

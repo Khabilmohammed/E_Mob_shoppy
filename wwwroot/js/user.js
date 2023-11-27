@@ -7,12 +7,13 @@ $(document).ready(function () {
 
 function loadDataTable() {
     datatable = $('#usertbl').DataTable({
-        "ajax": { url: '/admin/user/get' },
+        "ajax": { url: '/admin/user/GetAll' },
         "columns": [
             { data: 'name', "width": "15%" },
             { data: 'email', "width": "20%" },
-            { data: 'userName', "width": "25%" },
-            { data: 'phoneNumber', "width": "10%" }
+            { data: 'userName', "width": "20%" },
+            { data: 'phoneNumber', "width": "10%" },
+ 
         ]
     });
 }

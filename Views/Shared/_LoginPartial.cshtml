@@ -9,7 +9,7 @@
         <li class="dropdown nav-item">
             <a class="dropdown-toggle" data-bs-toggle="dropdown" id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" aria-expanded="false"><span class="text-center">@UserManager.GetUserName(User)!</span><img class="img-xs rounded-circle" src=@Url.Content("/assets/imgs/people/avatar2.jpg") alt="User"></a>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                <a class="dropdown-item" ><i class="material-icons md-perm_identity"></i>View Profile</a>
+                
                 <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index"><i class="material-icons md-settings"></i>Account Settings</a>
                 <a class="dropdown-item" asp-area="Customer" asp-controller="Cart"  asp-action="Index"><i class="material-icons md-account_balance_wallet"></i>Cart</a>
                 <a class="dropdown-item" asp-area="Customer" asp-controller="Cart" asp-action="ShowCoupon"><i class="material-icons md-receipt"></i>Coupons</a>
