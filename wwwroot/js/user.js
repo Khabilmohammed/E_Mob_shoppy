@@ -13,7 +13,7 @@ function loadDataTable() {
             { data: 'email', "width": "20%" },
             { data: 'userName', "width": "20%" },
             { data: 'phoneNumber', "width": "10%" },
- 
+           
         ]
     });
 }

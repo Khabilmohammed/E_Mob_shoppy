@@ -10,6 +10,7 @@ using E_mob_shoppy.Utility;
 using Stripe;
 using DinkToPdf.Contracts;
 using DinkToPdf;
+using E_mob_shoppy.DataAccess.DbInitializer;
 
 namespace E_mob_shoppy
 {
@@ -42,6 +43,15 @@ namespace E_mob_shoppy
                 option.ClientId = "454370760301-hupnkkjm6vb4k2s6nqjrp5sjj3kt5f7v.apps.googleusercontent.com";
                 option.ClientSecret = "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";
             });
+
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(option =>
+            {
+                option.IdleTimeout = TimeSpan.FromMinutes(100);
+                option.Cookie.HttpOnly = true;
+                option.Cookie.IsEssential = true;
+            });
+            builder.Services.AddScoped<IDbInitializer, DbInitializer>();
             builder.Services.AddRazorPages();
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
@@ -58,17 +68,30 @@ namespace E_mob_shoppy
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            
             StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();
+            SeedDatabase();
             app.MapRazorPages();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+
+            void SeedDatabase()
+            {
+                using (var scope = app.Services.CreateScope())
+                {
+                    var dbInitializer =scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+                    dbInitializer.Initialize();
+                }
+            }
+
+
+            
         }
     }
 }
